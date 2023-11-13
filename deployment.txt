@@ -92,3 +92,6 @@ Processor : i3(7th gen) and i7(11th gen)
 
     Regarding PeerJs server, that is not deployed in openshift, I used already cloud hosted one. Sometimes, it keeps down. If that happens, Call funtion will not work.
     So please, if it failes, keep looking https://status.peerjs.com/
+
+
+    when start with admin page, it will ask for CID for medicine names. cid will be => QmPzoqWhDxgVhwyFAj638LQReXuZUtLByoBE6VUEDJAudg. This wont change.
