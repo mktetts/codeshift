@@ -89,17 +89,17 @@ function DoctorPrescription() {
         setMyInfo(JSON.parse(sessionStorage.getItem('myInfo')))
         console.log(userInfo)
 
-        const peer = new Peer(CryptoJS.SHA256(userInfo[2]).toString(), {
-            host: process.env.REACT_APP_PEER_HOST,
-            port: process.env.REACT_APP_PEER_PORT,
-            path: process.env.REACT_APP_PEER_PATH,
-            secure: false,
-            config: {
-                allow_discovery: true,
-                iceServers: [{ url: "stun:stun.l.google.com:19302" }],
-            },
-        });
-
+        const peer = new Peer(CryptoJS.SHA256(userInfo[2]).toString());
+        // , {
+        //     host: process.env.REACT_APP_PEER_HOST,
+        //     port: process.env.REACT_APP_PEER_PORT,
+        //     path: process.env.REACT_APP_PEER_PATH,
+        //     secure: false,
+        //     config: {
+        //         allow_discovery: true,
+        //         iceServers: [{ url: "stun:stun.l.google.com:19302" }],
+        //     },
+        // }
 
         peer.on('open', (id) => {
             console.log("My Peer id : ", id)
