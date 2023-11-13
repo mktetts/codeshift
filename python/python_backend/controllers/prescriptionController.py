@@ -113,17 +113,21 @@ def decodeQRCode():
         return jsonify({'error': 'No file part'})
 
     img = request.files['image']
-    print(img)
-    img_data = BytesIO(img.read())
-    print(img_data)
-   # Read the QR code image
+    img_array = np.frombuffer(img.read(), np.uint8)
+    
+    # Decode the NumPy array as an image using OpenCV
+    img_cv2 = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+
+    # Now you can use img_cv2 as a variable containing the image data
+    detector = cv2.QRCodeDetector()
+    data, bbox, straight_qrcode = detector.detectAndDecode(img_cv2)
+       
+    # Read the QR code image
     # img.save("qrcode.png")
     # current_directory = os.path.dirname(os.path.realpath(__file__))
     # image = os.path.join(current_directory, '..', '..', 'qrcode.png')
     # qr_code_image = cv2.imread(image)
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
-        temp_file.write(img_data.getvalue())
-        temp_file_path = temp_file.name
+   
 
     try:
 
@@ -133,14 +137,14 @@ def decodeQRCode():
             barcode = reader.decode(image_path)
             return barcode.parsed
 
-        qr_code = decode_qr_code(temp_file_path)
-        print(qr_code)
+        # qr_code = decode_qr_code(temp_file_path)
+        # print(qr_code)
         w3 = python_backend.contract.blockchain.w3
         w3.middleware_onion.inject(geth_poa_middleware, layer=0)
         prescriptionDetailContract = prescriptionDetailsInstance(w3)
-        res = decodeInputData(w3, qr_code, prescriptionDetailContract)
+        res = decodeInputData(w3, data, prescriptionDetailContract)
         result = {
-            "hash" : qr_code,
+            "hash" : data,
             "data" : res
         }
         return Success("Success",result , 200)
