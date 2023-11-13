@@ -115,7 +115,7 @@ def decodeQRCode():
    # Read the QR code image
     current_directory = os.path.dirname(os.path.realpath(__file__))
     image = os.path.join(current_directory, '..', '..', 'qrcode.png')
-    qr_code_image = cv2.imread(image)
+    # qr_code_image = cv2.imread(image)
 
     try:
 
@@ -124,7 +124,7 @@ def decodeQRCode():
             barcode = reader.decode(image_path)
             return barcode.parsed
 
-        qr_code = decode_qr_code("qrcode.png")
+        qr_code = decode_qr_code(image)
         w3 = python_backend.contract.blockchain.w3
         w3.middleware_onion.inject(geth_poa_middleware, layer=0)
         prescriptionDetailContract = prescriptionDetailsInstance(w3)

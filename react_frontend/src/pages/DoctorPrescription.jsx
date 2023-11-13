@@ -168,7 +168,7 @@ function DoctorPrescription() {
             //   const videoHeight = remoteVideoRef.current.video.videoHeight;
 
             // Set video width
-            console.log(remoteVideoRef)
+            // console.log(remoteVideoRef)
 
             // Set canvas height and width
             canvasRef.current.width = 640;
@@ -180,7 +180,7 @@ function DoctorPrescription() {
             const casted = resized.cast('int32')
             const expanded = casted.expandDims(0)
             const obj = await net.executeAsync(expanded)
-            console.log(obj)
+            // console.log(obj)
 
             const boxes = await obj[1].array()
             const classes = await obj[2].array()
