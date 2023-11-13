@@ -1,3 +1,4 @@
+from io import BytesIO
 from python_backend.utils.success import Success
 from python_backend.utils.error import Error
 import python_backend.contract.blockchain
@@ -10,6 +11,7 @@ import qrcode
 import numpy as np
 from zxing import BarCodeReader
 import cv2
+import tempfile
 
 
 sys.dont_write_bytecode = True
@@ -111,20 +113,28 @@ def decodeQRCode():
         return jsonify({'error': 'No file part'})
 
     img = request.files['image']
-    img.save("qrcode.png")
+    print(img)
+    img_data = BytesIO(img.read())
+    print(img_data)
    # Read the QR code image
-    current_directory = os.path.dirname(os.path.realpath(__file__))
-    image = os.path.join(current_directory, '..', '..', 'qrcode.png')
+    # img.save("qrcode.png")
+    # current_directory = os.path.dirname(os.path.realpath(__file__))
+    # image = os.path.join(current_directory, '..', '..', 'qrcode.png')
     # qr_code_image = cv2.imread(image)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
+        temp_file.write(img_data.getvalue())
+        temp_file_path = temp_file.name
 
     try:
 
         def decode_qr_code(image_path):
             reader = BarCodeReader()
+            print(image_path)
             barcode = reader.decode(image_path)
             return barcode.parsed
 
-        qr_code = decode_qr_code(image)
+        qr_code = decode_qr_code(temp_file_path)
+        print(qr_code)
         w3 = python_backend.contract.blockchain.w3
         w3.middleware_onion.inject(geth_poa_middleware, layer=0)
         prescriptionDetailContract = prescriptionDetailsInstance(w3)
@@ -134,7 +144,8 @@ def decodeQRCode():
             "data" : res
         }
         return Success("Success",result , 200)
-    except:
+    except Exception as e:
+        print(e)
         result = {
             "hash" : None
         }
