@@ -1,10 +1,10 @@
-package service;
+package org.codeshift.dao;
 
 import java.util.List;
 
-import model.Patient;
+import org.codeshift.model.Patient;
 
-public interface PatientService {
+public interface PatientDao {
 	
 	List<Patient> findAll();
 	Patient findById(final Long personId);
@@ -13,6 +13,8 @@ public interface PatientService {
 	void update(final Patient person);
 	void deleteById(final Long personId);
 	void deleteByEmail(final String email);
-
-	
 }
+
+
+
+

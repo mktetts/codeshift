@@ -1,10 +1,10 @@
-package dao;
+package org.codeshift.dao;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import model.Patient;
+import org.codeshift.model.Patient;
 
 @Repository
 public class PatientDaoImpl implements PatientDao {

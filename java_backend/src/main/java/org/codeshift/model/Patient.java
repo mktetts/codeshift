@@ -1,10 +1,9 @@
-package model;
+package org.codeshift.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 // import javax.persistence.Id;
-import javax.persistence.Table;
-
+import jakarta.persistence.Table;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
@@ -34,7 +33,7 @@ public class Patient extends PanacheEntity {
 	}
 	
 	public void setId(String emaill) {
-		this.email = emaill;
+		this.email = emaill; 
 	}
 	
 	public String getName() {

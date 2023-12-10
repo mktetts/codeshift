@@ -1,14 +1,14 @@
-package service;
+package org.codeshift.service;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dao.PatientDao;
-import model.Patient;
+import org.codeshift.dao.PatientDao;
+import org.codeshift.model.Patient;
 
 @Service
 @Transactional
