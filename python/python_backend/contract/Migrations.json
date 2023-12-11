@@ -50,7 +50,7 @@
   "sourceMap": "66:352:1:-:0;;;;;;;113:10;66:352;;-1:-1:-1;;;;;;66:352:1;113:10;66:352;;;;;;;;;;;;;",
   "deployedSourceMap": "66:352:1:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;66:352:1;;;;;;;;211:10;:19;66:352;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;127:36;66:352;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.22 <0.9.0;\n\ncontract Migrations {\n  address public owner = msg.sender;\n  uint public last_completed_migration;\n\n  modifier restricted() {\n    require(\n      msg.sender == owner,\n      \"This function is restricted to the contract's owner\"\n    );\n    _;\n  }\n\n  function setCompleted(uint completed) public restricted {\n    last_completed_migration = completed;\n  }\n}",
-  "sourcePath": "/mnt/hdd/projects/codeshift/sc/contracts/Migrations.sol",
+  "sourcePath": "Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -454,7 +454,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2023-11-09T13:14:48.396Z",
+  "updatedAt": "2023-12-07T19:28:34.329Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

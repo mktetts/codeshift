@@ -5,7 +5,7 @@ from web3 import Web3
 
 
 from dotenv import load_dotenv
-load_dotenv("../python_backend/config/ev.env")
+load_dotenv("../config/ev.env")
 
 w3 = None
 network_id = None
@@ -21,13 +21,13 @@ def isConnected():
         #     file_content = file.read()
 
         # print(file_content)
-        # w3 = Web3(Web3.HTTPProvider(os.environ["BC_IP"]))
-        current_directory = os.path.dirname(os.path.realpath(__file__))
-        env_content_file = os.path.join(current_directory, '..', '..', 'envfile')
-        with open(env_content_file, 'r') as file:
-            ganache_ip = str(file.read())
+        w3 = Web3(Web3.HTTPProvider(os.getenv('BC_IP')))
+        # current_directory = os.path.dirname(os.path.realpath(__file__))
+        # env_content_file = os.path.join(current_directory, '..', '..', 'envfile')
+        # with open(env_content_file, 'r') as file:
+        #     ganache_ip = str(file.read())
         # w3 = Web3(Web3.HTTPProvider("http://ganache-cli-mktetts-dev.apps.sandbox-m3.1530.p1.openshiftapps.com"))
-        w3 = Web3(Web3.HTTPProvider(ganache_ip))
+        # w3 = Web3(Web3.HTTPProvider(ganache_ip))
 
 
         network_id = str(w3.eth.chain_id)

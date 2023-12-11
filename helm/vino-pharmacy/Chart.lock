@@ -1,0 +1,15 @@
+dependencies:
+- name: base
+  repository: file://../base
+  version: 0.1.0
+- name: base
+  repository: file://../base
+  version: 0.1.0
+- name: base
+  repository: file://../base
+  version: 0.1.0
+- name: ganache
+  repository: file://../ganache
+  version: 0.1.0
+digest: sha256:4ad7fca1b54e651af662e10621117457848f273e24fec4534df800ecc2a404a7
+generated: "2023-12-07T14:20:31.197851-05:00"

@@ -1,8 +1,0 @@
-org/codeshift/model/Patient.class
-org/codeshift/dao/PatientDaoImpl.class
-org/codeshift/service/PatientServiceImpl.class
-org/codeshift/GreetingResource.class
-org/codeshift/service/PatientService.class
-META-INF/panache-archive.marker
-org/codeshift/controller/PatientController.class
-org/codeshift/dao/PatientDao.class

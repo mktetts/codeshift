@@ -1,0 +1,98 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/route-disabled: 'false'
+    app.openshift.io/vcs-url: {{ .Values.global.git.url }}
+    app.openshift.io/vcs-ref: {{ .Values.global.git.ref }}
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"{{ .Values.app.name }}:latest", "namespace": "{{ .Release.Namespace }}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"{{ .Values.app.name }}\")].image","pause":"false"}]
+    openshift.io/generated-by: OpenShiftWebConsole
+    {{- if .Values.runtime.connectsTo }}
+    app.openshift.io/connects-to: {{ .Values.runtime.connectsTo }}
+    {{- end }}
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+    system: {{ .Values.global.projectName }}
+    app.kubernetes.io/component: {{ .Values.app.name }}
+    app.kubernetes.io/instance: {{ .Values.app.name }}
+    app.kubernetes.io/name: {{ .Values.app.name }}
+    app.kubernetes.io/part-of: {{ .Values.global.projectName }}
+    app.openshift.io/runtime: {{ .Values.app.runtime }}
+    app.openshift.io/runtime-version: {{ .Values.app.runtimeVersion }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+      system: {{ .Values.global.projectName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+        system: {{ .Values.global.projectName }}
+      annotations:
+        app.openshift.io/vcs-url: {{ .Values.global.git.url }}
+        app.openshift.io/vcs-ref: {{ .Values.global.git.ref }}
+    spec:
+      containers:
+        - name: {{ .Values.app.name }}
+          image: {{ .Values.app.name }}:latest
+          ports:
+            - containerPort: {{ .Values.runtime.containerPort }}
+              protocol: TCP
+              name: http
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: {{ .Values.runtime.probes.ready }}
+              port: {{ .Values.runtime.containerPort }}
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 20
+          startupProbe:
+            failureThreshold: 5
+            httpGet:
+              path: {{ .Values.runtime.probes.startup }}
+              port: {{ .Values.runtime.containerPort }}
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 20
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: {{ .Values.runtime.probes.live }}
+              port: {{ .Values.runtime.containerPort }}
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 20
+          {{- if .Values.runtime.env }}
+          env:
+            {{- range $key, $val := .Values.runtime.env }}
+            - name: {{ $key }}
+              value: {{ tpl $val $ }}
+            {{- end}}
+          {{- end }}
+          {{- if .Values.runtime.resources }}
+          resources:
+          {{- toYaml .Values.runtime.resources | nindent 12 }}
+          {{- else }}
+          resources: {}
+          {{- end }}
+          imagePullPolicy: Always
+      restartPolicy: Always
+      securityContext: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%

@@ -10,11 +10,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/code-with-codeshift .
+# docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/hackathon .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/code-with-codeshift
+# docker run -i --rm -p 8080:8080 quarkus/hackathon
 #
 ###
 FROM quay.io/quarkus/quarkus-micro-image:2.0

@@ -4,4 +4,4 @@ truffle compile
 
 # python3 deploy.py
 
-mv build/contracts/* ../python_backend/contract/
+mv build/contracts/* ../python/python_backend/contract/

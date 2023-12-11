@@ -1,7 +1,0 @@
-/mnt/hdd/projects/deployment_hackathon/java_backend/src/main/java/org/codeshift/controller/PatientController.java
-/mnt/hdd/projects/deployment_hackathon/java_backend/src/main/java/org/codeshift/GreetingResource.java
-/mnt/hdd/projects/deployment_hackathon/java_backend/src/main/java/org/codeshift/service/PatientServiceImpl.java
-/mnt/hdd/projects/deployment_hackathon/java_backend/src/main/java/org/codeshift/service/PatientService.java
-/mnt/hdd/projects/deployment_hackathon/java_backend/src/main/java/org/codeshift/dao/PatientDao.java
-/mnt/hdd/projects/deployment_hackathon/java_backend/src/main/java/org/codeshift/dao/PatientDaoImpl.java
-/mnt/hdd/projects/deployment_hackathon/java_backend/src/main/java/org/codeshift/model/Patient.java
