@@ -1,0 +1,20 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+    system: {{ .Values.global.projectName }}
+    app.kubernetes.io/component: {{ .Values.app.name }}
+    app.kubernetes.io/instance: {{ .Values.app.name }}
+    app.kubernetes.io/name: {{ .Values.app.name }}
+    app.kubernetes.io/part-of: {{ .Values.global.projectName }}
+    app.openshift.io/runtime: {{ .Values.app.runtime }}
+    app.openshift.io/runtime-version: {{ .Values.app.runtimeVersion }}
+  annotations:
+    app.openshift.io/vcs-url: {{ .Values.global.git.url }}
+    app.openshift.io/vcs-ref: {{ .Values.global.git.ref }}
+spec:
+  lookupPolicy:
+    local: false

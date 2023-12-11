@@ -1,17 +1,12 @@
 package org.codeshift.dao;
 
-import java.util.List;
-
 import org.codeshift.model.Patient;
 
-public interface PatientDao {
-	
-	List<Patient> findAll();
-	Patient findById(final Long personId);
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+
+public interface PatientDao extends PanacheRepository<Patient> {
+
 	Patient findByEmail(final String email);
-	void save(final Patient person);
-	void update(final Patient person);
-	void deleteById(final Long personId);
 	void deleteByEmail(final String email);
 }
 

@@ -1,53 +1,53 @@
 package org.codeshift.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-// import javax.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
 @Table(name = "patients", schema = "PUBLIC")
-public class Patient extends PanacheEntity {
+public class Patient {
+	@Id
+  @GeneratedValue
+	private Long id;
 	
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE)
-	// @Id
-	@Column(name = "email")
 	private String email;
 	
-	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "card")
 	private String card;
 
-	@Column(name = "amount")
 	private int amount;
-	
-	public Patient() {
-		
+
+	public Long getId() {
+		return id;
 	}
-	
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getEmail() {
 		return email;
 	}
-	
-	public void setId(String emaill) {
-		this.email = emaill; 
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getCard() {
 		return card;
 	}
-	
+
 	public void setCard(String card) {
 		this.card = card;
 	}
@@ -55,20 +55,10 @@ public class Patient extends PanacheEntity {
 	public int getAmount() {
 		return amount;
 	}
-	
+
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-
-	public static Patient findByEmail(String email2) {
-		return null;
-	}
-
-    public static void deleteByEmail(String email2) {
-    }
-	
-	
-	
 }
 
 

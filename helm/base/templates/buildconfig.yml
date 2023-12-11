@@ -1,0 +1,50 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftWebConsole
+    app.openshift.io/vcs-url: {{ .Values.global.git.url }}
+    app.openshift.io/vcs-ref: {{ .Values.global.git.ref }}
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+    system: {{ .Values.global.projectName }}
+    app.kubernetes.io/component: {{ .Values.app.name }}
+    app.kubernetes.io/instance: {{ .Values.app.name }}
+    app.kubernetes.io/name: {{ .Values.app.name }}
+    app.kubernetes.io/part-of: {{ .Values.global.projectName }}
+    app.openshift.io/runtime: {{ .Values.app.runtime }}
+    app.openshift.io/runtime-version: {{ .Values.app.runtimeVersion }}
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: '{{ .Values.app.name }}:latest'
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: openshift
+        name: {{ .Values.build.sourceImageStream }}
+      {{- if .Values.build.env }}
+      env:
+        {{- range $key, $val := .Values.build.env }}
+        - name: {{ $key }}
+          value: '{{ tpl $val $ }}'
+        {{- end}}
+      {{- end }}
+  source:
+    type: Git
+    git:
+      uri: {{ .Values.global.git.url }}
+      ref: {{ .Values.global.git.ref }}
+    contextDir: {{ .Values.build.contextDir }}
+  runPolicy: Serial
+  {{- if .Values.build.resources }}
+  resources:
+  {{- toYaml .Values.build.resources | nindent 4 }}
+  {{- end }}
+  triggers:
+    - type: ConfigChange

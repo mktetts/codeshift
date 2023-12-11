@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+    system: {{ .Values.global.projectName }}
+    app.kubernetes.io/component: {{ .Values.app.name }}
+    app.kubernetes.io/instance: {{ .Values.app.name }}
+    app.kubernetes.io/name: {{ .Values.app.name }}
+    app.kubernetes.io/part-of: {{ .Values.global.projectName }}
+    app.openshift.io/runtime: {{ .Values.app.runtime }}
+    app.openshift.io/runtime-version: {{ .Values.app.runtimeVersion }}
+  annotations:
+    app.openshift.io/vcs-url: {{ .Values.global.git.url }}
+    app.openshift.io/vcs-ref: {{ .Values.global.git.ref }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+      system: {{ .Values.global.projectName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+        system: {{ .Values.global.projectName }}
+      annotations:
+        app.openshift.io/vcs-url: {{ .Values.global.git.url }}
+        app.openshift.io/vcs-ref: {{ .Values.global.git.ref }}
+    spec:
+      containers:
+        - name: {{ .Values.app.name }}
+          image: trufflesuite/{{ .Values.app.name }}:latest  # Use the image for Ganache CLI
+          ports:
+            - containerPort: {{ .Values.runtime.containerPort }}  # Ganache listens on port 8545 for Ethereum RPC
+          args: ["-h", "0.0.0.0"]  # Bind to all network interfaces
+          resources: {}
+          imagePullPolicy: Always
+          {{- if .Values.runtime.env }}
+          env:
+          {{- range $key, $val := .Values.runtime.env }}
+            - name: {{ $key }}
+              {{- if $.Values.runtime.envTemplated }}
+              value: {{ tpl $val $ }}
+              {{- else }}
+              value: '{{ $val }}'
+              {{- end }}
+          {{- end}}
+          {{- end }}
+          {{- if .Values.runtime.resources }}
+          resources:
+          {{- toYaml .Values.runtime.resources | nindent 12 }}
+          {{- else }}
+          resources: { }
+          {{- end }}
+      restartPolicy: Always

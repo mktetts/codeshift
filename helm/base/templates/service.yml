@@ -1,0 +1,27 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+    system: {{ .Values.global.projectName }}
+    app.kubernetes.io/component: {{ .Values.app.name }}
+    app.kubernetes.io/instance: {{ .Values.app.name }}
+    app.kubernetes.io/name: {{ .Values.app.name }}
+    app.kubernetes.io/part-of: {{ .Values.global.projectName }}
+    app.openshift.io/runtime: {{ .Values.app.runtime }}
+    app.openshift.io/runtime-version: {{ .Values.app.runtimeVersion }}
+  annotations:
+    app.openshift.io/vcs-url: {{ .Values.global.git.url }}
+    app.openshift.io/vcs-ref: {{ .Values.global.git.ref }}
+spec:
+  ports:
+    - name: {{ .Values.runtime.portName }}
+      protocol: TCP
+      port: {{ .Values.runtime.servicePort }}
+      targetPort: {{ .Values.runtime.containerPort }}
+  type: ClusterIP
+  selector:
+    app: {{ .Values.app.name }}
+    system: {{ .Values.global.projectName }}

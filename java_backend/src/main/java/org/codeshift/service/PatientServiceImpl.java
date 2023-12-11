@@ -2,24 +2,23 @@ package org.codeshift.service;
 
 import java.util.List;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import org.codeshift.dao.PatientDao;
 import org.codeshift.model.Patient;
 
-@Service
+@ApplicationScoped
 @Transactional
 public class PatientServiceImpl implements PatientService {
 	
-	@Autowired
-	private PatientDao patientDao;
+	@Inject
+	PatientDao patientDao;
 	
 	@Override
 	public List<Patient> findAll() {
-		return this.patientDao.findAll();
+		return this.patientDao.listAll();
 	}
 	
 	@Override
@@ -34,12 +33,12 @@ public class PatientServiceImpl implements PatientService {
 	
 	@Override
 	public void save(Patient person) {
-		this.patientDao.save(person);
+		this.patientDao.persist(person);
 	}
 	
 	@Override
 	public void update(Patient person) {
-		this.patientDao.update(person);
+		this.patientDao.persist(person);
 	}
 	
 	@Override
@@ -50,8 +49,6 @@ public class PatientServiceImpl implements PatientService {
 	public void deleteByEmail(String email) {
 		this.patientDao.deleteByEmail(email);
 	}
-	
-	
 }
 
 

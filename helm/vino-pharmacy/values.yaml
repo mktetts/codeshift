@@ -1,0 +1,123 @@
+global:
+  git:
+    url: https://github.com/mktetts/deployment_hackathon
+    ref: main
+  projectName: vino-pharmacy
+# Need to provide these properties when installing the chart
+# via -set global.cluster.baseDomain=<baseDomain>
+#  cluster:
+#    baseDomain: FILL_THIS_IN
+
+react-frontend:
+  enabled: true
+  app:
+    name: vino-phamacy-ui
+    runtime: nodejs
+    runtimeVersion: 16-ubi9
+  build:
+    sourceImageStream: nodejs:16-ubi9
+    contextDir: /react_frontend
+    env:
+      REACT_APP_BACKEND_URL: "https://python-backend-{{ .Release.Namespace }}.{{ .Values.global.cluster.baseDomain }}/api"
+      REACT_APP_JAVA_BACKEND_URL: "https://java-backend-{{ .Release.Namespace }}.{{ .Values.global.cluster.baseDomain }}/patients"
+    resources:
+      requests:
+        memory: 500Mi
+  runtime:
+    containerPort: 8080
+    servicePort: 8080
+    portName: http
+    probes:
+      live: /
+      ready: /
+      startup: /
+    connectsTo: "python-backend,java-backend"
+    env:
+      REACT_APP_BACKEND_URL: "https://python-backend-{{ .Release.Namespace }}.{{ .Values.global.cluster.baseDomain }}/api"
+      REACT_APP_JAVA_BACKEND_URL: "https://java-backend-{{ .Release.Namespace }}.{{ .Values.global.cluster.baseDomain }}/patients"
+#      NODE_OPTIONS: "--max-old-space-size=1000"
+    resources:
+      requests:
+        memory: 500Mi
+      limits:
+        memory: 1Gi
+
+java-backend:
+  enabled: true
+  app:
+    name: java-backend
+    runtime: quarkus
+    runtimeVersion: openjdk-17-ubi8
+#    runtimeVersion: openjdk-11-ubi8
+  build:
+    sourceImageStream: java:openjdk-17-ubi8
+#    sourceImageStream: java:openjdk-11-ubi8
+    contextDir: /java_backend
+    envTemplated: false
+    env:
+      MAVEN_ARGS: '-e -DskipTests -Dcom.redhat.xpaas.repo.redhatga -Dfabric8.skip=true -Djkube.skip=true --batch-mode -Djava.net.preferIPv4Stack=true -s /tmp/artifacts/configuration/settings.xml -Dmaven.repo.local=/tmp/artifacts/m2'
+      QUARKUS_KUBERNETES_CLIENT_TRUST_CERTS: 'false'
+      QUARKUS_CONTAINER_IMAGE_BUILD: 'false'
+      QUARKUS_KUBERNETES_DEPLOY: 'false'
+      QUARKUS_APPLICATION_NAME: java-backend
+  runtime:
+    containerPort: 8080
+    servicePort: 80
+    portName: http
+    probes:
+      live: /q/health/live
+      ready: /q/health/ready
+      startup: /q/health/started
+    env:
+      JAVA_APP_JAR: /deployments/quarkus-run.jar
+    resources:
+      limits:
+        memory: 768Mi
+      requests:
+        memory: 256Mi
+        cpu: 500m
+
+python-backend:
+  enabled: true
+  app:
+    name: python-backend
+    runtime: python
+    runtimeVersion: 3.9-ubi9
+  build:
+    sourceImageStream: python:3.9-ubi9
+    contextDir: /python
+    env:
+      BC_IP: "http://ganache-cli.{{ .Release.Namespace }}.svc.cluster.local:8545"
+  runtime:
+    containerPort: 8080
+    servicePort: 80
+    portName: http
+    probes:
+      live: /
+      ready: /
+      startup: /
+    connectsTo: ganache-cli
+    env:
+      BC_IP: "http://ganache-cli.{{ .Release.Namespace }}.svc.cluster.local:8545"
+    resources:
+      limits:
+        memory: 1Gi
+      requests:
+        memory: 500Mi
+        cpu: 500m
+
+ganache:
+  enabled: true
+  app:
+    name: ganache-cli
+    runtime: other
+    runtimeVersion: latest
+  runtime:
+    containerPort: 8545 # Ganache listens on port 8545 for Ethereum RPC
+    servicePort: 8545
+    resources:
+      limits:
+        memory: 768Mi
+      requests:
+        memory: 256Mi
+        cpu: 500m

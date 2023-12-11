@@ -43,13 +43,12 @@ vcpkg/
 *.log
 
 # Compiled classes
-/target/
+**/target/**
 /bin/
 /out/
 
 # Maven
-/.mvn/
-.mvn/
+**/.mvn/maven-wrapper.jar
 
 # Gradle
 /.gradle/
@@ -118,3 +117,9 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+/java_backend/hackathon.iml
+
+**/target/**
+
+# Helm
+helm/**/*.tgz
