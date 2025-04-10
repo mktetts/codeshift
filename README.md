@@ -1,3 +1,6 @@
+Prize: First prize
+URL : https://devpost.com/software/vino-pharmacy-shift
+
 # Deploying the project on openshift cluster:
 
 Locally test os : Ubuntu(22.04)
